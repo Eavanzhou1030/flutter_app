@@ -1,24 +1,48 @@
+
+
 import 'package:flutter/material.dart';
-import 'state/top_screen.dart';
-import 'state/model/count_model.dart';
-import 'package:scoped_model/scoped_model.dart';
+// import 'state/scoped/blocs/bloc_provider.dart';
+// import 'state/scoped/top_page.dart';
 
-void main() => runApp(new MyApp());
+// import 'state/single_global_instance/top_page.dart';
 
+import 'state/rxdart/blocs/bloc_provider.dart';
+import 'state/rxdart/top_page.dart';
+
+void main() => runApp(MyApp());
+
+// scope入口
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       child: MaterialApp(
+//         title: 'Scope Bloc',
+//         home: TopPage(),
+//       ),
+//     );
+//   }
+// }
+
+// global_instance入口
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'global instance',
+//       home: TopPage(),
+//     );
+//   }
+// }
+
+// rsdart入口
 class MyApp extends StatelessWidget {
-  // 创建顶层状态
-  CountModel countModel = CountModel();
-
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<CountModel>(
-      model: countModel,
-      child: new MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue
-        ),
-        home: TopScreen(),
+    return BlocProvider(
+      child: MaterialApp(
+        title: 'Top page',
+        home: TopPage()
       ),
     );
   }

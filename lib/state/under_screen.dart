@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import './model/count_model.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import './states/count_state.dart';
 
 class UnderScreen extends StatefulWidget {
-  final String title;
-  UnderScreen({Key key, @required this.title}):super(key: key);
-
   @override
   _UnderScreenState createState() => _UnderScreenState();
 }
@@ -13,34 +10,38 @@ class UnderScreen extends StatefulWidget {
 class _UnderScreenState extends State<UnderScreen> {
   @override
   Widget build(BuildContext context) {
-   return ScopedModelDescendant<CountModel>(builder: (context, child, model) {
-     return Scaffold(
-       appBar: AppBar(
-         title: Text(widget.title),
-       ),
-       body: Center(
-         child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Under Screen'),
+      ),
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-           Text(
-             'you haved pushed the button this many times:',
-             style: TextStyle(fontSize: 20.0),
-           ),
-           Text(
-             '${model.count}',
-             style: TextStyle(fontSize: 20.0),
-           )
+            Text('You haved push many times'),
+            StoreConnector<CountState, int>( // storeConnector通过StoreProvider找到顶层的store，而且能够在state发生变化的时候rebuild widget
+              converter: (store) => store.state.count,
+              builder: (context, count) {
+                Text(
+                  count.toString(),
+                  style: Theme.of(context).textTheme.display1,
+                );
+              }
+            )
           ],
-         ),
-       ),
-       floatingActionButton: FloatingActionButton(
-         onPressed: () {
-           model.increment();
-         },
-         tooltip: 'Increment',
-         child: Icon(Icons.add),
-       ),
-     );
-   });
+        ),
+      ),
+      floatingActionButton: StoreConnector<CountState, VoidCallback> (
+        converter: (store) {
+          return () => store.dispatch(Action.increment);
+        },
+        builder: (context, callback) {
+          return FloatingActionButton(
+            onPressed: callback,
+            child: Icon(Icons.add),
+          );
+        }
+      )
+    );
   }
 }
