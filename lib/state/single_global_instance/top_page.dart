@@ -10,7 +10,7 @@ class TopPage extends StatelessWidget {
         title: Text('Top Page'),
       ),
       body: StreamBuilder(
-        stream: bloc.stream,
+        stream: bloc.stream, // streamBuilder监听Bloc流的输出结果，更新子Widget视图
         initialData: bloc.value,
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           return Text('You hit me ${snapshot.data} times');

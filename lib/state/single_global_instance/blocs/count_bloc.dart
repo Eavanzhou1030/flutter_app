@@ -16,4 +16,4 @@ class CountBLoC {
   }
 }
 
-CountBLoC bloc = CountBLoC();
+CountBLoC bloc = CountBLoC(); // 创建单例形式

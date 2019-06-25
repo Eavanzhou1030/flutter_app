@@ -10,13 +10,13 @@ class UnderPage extends StatelessWidget {
       ),
       body: Center(
         child: StreamBuilder(
-          stream: bloc.stream,
+          stream: bloc.stream, // streamBuilder监听Bloc流的输出结果
           initialData: bloc.value,
           builder: (context, snapshot) => Text('you hit me: ${snapshot.data} timers', style: Theme.of(context).textTheme.display1,)
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => bloc.increment(),
+        onPressed: () => bloc.increment(), // streamBuilder发出action，添加到Bloc的sink入口，进行处理
         child: Icon(Icons.add),
       ),
     );
