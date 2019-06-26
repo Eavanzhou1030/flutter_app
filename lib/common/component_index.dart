@@ -6,6 +6,10 @@ export 'package:flutter_application/res/index.dart';
 export 'package:flutter_application/common/common.dart';
 export 'package:flutter_application/common/sp_helper.dart';
 export 'package:flutter_application/data/protocol/models.dart';
+export 'package:flutter_application/blocs/bloc_provider.dart';
+export 'package:flutter_application/utils/util_index.dart';
+export 'package:flutter_application/blocs/bloc_index.dart';
+export 'package:flutter_application/event/event.dart';
 
 export 'package:rxdart/rxdart.dart';
 

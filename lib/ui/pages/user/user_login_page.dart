@@ -77,7 +77,21 @@ class LoginBody extends StatelessWidget {
                 LoginItem(
                   controller: _controllPwd,
                   prefixIcon: Icons.lock,
+                  hasSuffixIcon: true,
                   hintText: '请输入密码',
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: Dimens.gap_dp15),
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    child: Text(
+                      '忘记密码',
+                      style: TextStyle(color: Colours.gray_99,fontSize: Dimens.font_sp14),
+                    ),
+                    onTap: () {
+                      Util.showSnackBar(context, '请联系管理员~');
+                    },
+                  ),
                 ),
                 RoundButton(
                   text: '登录',

@@ -3,6 +3,7 @@ import 'package:flutter_application/common/common.dart';
 import 'package:flutter_application/data/api/apis.dart';
 import 'package:flutter_application/data/protocol/models.dart';
 
+// 注册、登录http请求
 class UserRepository {
   Future<UserModel> login(LoginReq req) async {
     BaseRespR<Map<String, dynamic>> baseResp = await DioUtil()
