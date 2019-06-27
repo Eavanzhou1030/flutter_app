@@ -3,11 +3,11 @@ import 'package:flutter_application/common/component_index.dart';
 import 'package:flutter_application/data/repository/wan_repository.dart';
 
 class ComListBloc implements BlocBase {
-  BehaviorSubject<List<ReposModel>> _comListData = BehaviorSubject<List<ReposModel>>();
+  BehaviorSubject<List<ReposModel>> _comListData = BehaviorSubject<List<ReposModel>>(); // 定义一个StreamController，并且定义Controller中的处理函数
 
   Sink<List<ReposModel>> get _comListSink => _comListData.sink;
 
-  Stream<List<ReposModel>> get _comListStream => _comListData.stream;
+  Stream<List<ReposModel>> get comListStream => _comListData.stream;
 
   List<ReposModel> comList;
   int _comListPage = 0;
@@ -16,15 +16,26 @@ class ComListBloc implements BlocBase {
 
   Sink<StatusEvent> get _comListEventSink => _comListEvent.sink;
 
-  Stream<StatusEvent> get _comListEventStream => _comListEvent.stream.asBroadcastStream();
+  Stream<StatusEvent> get comListEventStream => _comListEvent.stream.asBroadcastStream();
 
-  WanRepository wanRepository = new WanRepository();
+  WanRepository wanRepository = new WanRepository(); // 请求的网络接口
 
   @override
   Future getData({String labelId, int cid, int page}) {
-    // switch(labelId) {
-    //   case 
-    // }
+    switch (labelId) {
+      case Ids.titleReposTree:
+        return getRepos(labelId, cid, page);
+        break;
+      case Ids.titleWxArticleTree:
+        return getWxArticle(labelId, cid, page);
+        break;
+      case Ids.titleSystemTree:
+        return getArticle(labelId, cid, page);
+        break;
+      default:
+        return Future.delayed(new Duration(seconds: 1));
+        break;
+    }
   }
 
   @override
@@ -62,16 +73,43 @@ class ComListBloc implements BlocBase {
       }
       comList.addAll(list);
       _comListSink.add(UnmodifiableListView<ReposModel>(comList));
-      _comListEventSink.add(StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle, cid: cid));
+      _comListEventSink.add(StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle, cid: cid)); // 向StreamController中添加event状态
     }).catchError((_) {
       _comListPage--;
       _comListEventSink.add(StatusEvent(labelId, RefreshStatus.failed));
     });
   }
 
-  Future getWxArticle(String labelId, int cid, int page) async {}
+  Future getWxArticle(String labelId, int cid, int page) async {
+    return wanRepository.getWxArticleList(id: cid, page: page).then((list) {
+      if(comList == null) comList = List();
+      if(page == 1) {
+        comList.clear();
+      }
+      comList.addAll(list);
+      _comListSink.add(UnmodifiableListView<ReposModel>(comList));
+      _comListEventSink.add(StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle, cid: cid));
+    }).catchError((error) {
+      _comListPage--;
+      _comListEventSink.add(StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
 
-  Future getArticle(String labelId, int cid, int page) async {}
+  Future getArticle(String labelId, int cid, int page) async {
+    ComReq _comReq = new ComReq(cid);
+    return wanRepository.getArticleList(page: page, data: _comReq.toJson()).then((list) {
+      if(comList == null) comList = List();
+      if(page == 0) {
+        comList.clear();
+      }
+      comList.addAll(list);
+      _comListSink.add(UnmodifiableListView<ReposModel>(list));
+      _comListEventSink.add(StatusEvent(labelId, ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle, cid: cid));
+    }).catchError((error) {
+      _comListPage--;
+      _comListEventSink.add(StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
 
   @override
   void dispose() {

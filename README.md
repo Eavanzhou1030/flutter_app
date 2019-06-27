@@ -115,3 +115,8 @@ samples, guidance on mobile development, and a full API reference.
 
 * BLoC中没有Store的概念，只有一个StreamController，但是这个Controller并不存放数据，只处理数据，并且BLoC中并没有convert方法，View直接将state转化为ViewModel
 
+
+## AutomaticKeepAliveClientMixin切换tab的时候，将tab的内容保存在内存中
+Flutter tab切换之后保存tab的状态，flutter中为了节约内存不会保存widget的状态，widget都是临时变量。使用TabBar, TabBarView的时候，切换tab之后initState会被切换一次。
+添加AutomaticKeepAliveClientMixin并设置为true，这样就能保持当前不被initState
+

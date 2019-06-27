@@ -10,6 +10,7 @@ export 'package:flutter_application/blocs/bloc_provider.dart';
 export 'package:flutter_application/utils/util_index.dart';
 export 'package:flutter_application/blocs/bloc_index.dart';
 export 'package:flutter_application/event/event.dart';
+export 'package:flutter_application/widgets/widgets_index.dart';
 
 export 'package:rxdart/rxdart.dart';
 
