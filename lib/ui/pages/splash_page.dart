@@ -34,7 +34,7 @@ class SplashPageState extends State<SplashPage> {
   void _initAsync() async {
     await SpUtil.getInstance();
     _loadSplashData();
-    // 定义订阅器
+    // 定义订阅器,获取存储中是否已经记录过是不是新用户
     Observable.just(1).delay(Duration(milliseconds: 500)).listen((_) {
       if(SpUtil.getBool(Contanst.key_guide, defValue: true) && ObjectUtil.isNotEmpty(_guideList)) {
         SpUtil.putBool(Contanst.key_guide, false);
@@ -45,7 +45,7 @@ class SplashPageState extends State<SplashPage> {
     });
   }
 
-  // 加载引导数据
+  // 加载引导图数据，根据引导页返回的数据显示引导内容
   void _loadSplashData() {
     _splashModel = SpHelper.getObject(Contanst.key_splash_model);
     if(_splashModel != null) {
@@ -66,7 +66,7 @@ class SplashPageState extends State<SplashPage> {
     });
   }
 
-  // 初始化banner数据
+  // 初始化banner数据,看过引导图之后将status设置为2
   void _initBanner() {
     _initBannerData();
     setState(() {
@@ -118,7 +118,7 @@ class SplashPageState extends State<SplashPage> {
     }
   }
 
-  // 初始化
+  // 初始化，引导页的数据为空的时候直接调整到首页，否则进行倒计时
   void _initSplash() {
     if(_splashModel == null) {
       _goMain();

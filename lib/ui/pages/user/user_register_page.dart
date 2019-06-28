@@ -54,7 +54,7 @@ class UserRegisterBody extends StatelessWidget {
         return ;
       }
 
-      RegisterReq req = new RegisterReq(username, password, passwordRe);
+      RegisterReq req = new RegisterReq(username.trim(), password.trim(), passwordRe.trim());
       userRepository.register(req).then((UserModel model){
         LogUtil.e("LoginRespL${model.toString()}");
         Util.showSnackBar(context, '注册成功~');

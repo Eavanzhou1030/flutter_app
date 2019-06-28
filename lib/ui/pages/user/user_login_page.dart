@@ -30,7 +30,7 @@ class LoginBody extends StatelessWidget {
     TextEditingController _controllName = TextEditingController();
     TextEditingController _controllPwd = TextEditingController();
     UserRepository userRepository = UserRepository();
-    UserModel userModel = SpHelper.getObject<UserModel>(BaseConstant.keyUserModel);
+    UserModel userModel = SpHelper.getObject<UserModel>(BaseConstant.keyUserModel); // 数据存储操作，是否存在用户记录
     _controllName.text = userModel?.username ?? "";
 
     void _userLogin() {
@@ -52,7 +52,8 @@ class LoginBody extends StatelessWidget {
         LogUtil.e('LoginResp: ${model.toString()}');
         Util.showSnackBar(context, '登录成功');
         Observable.just(1).delay(Duration(milliseconds: 500)).listen((_) {
-
+          Event.sendAppEvent(context, Contanst.type_refresh_all);
+          
         });
       }).catchError((error) {
         LogUtil.e('LoginResp error: ${error.toString()}');
